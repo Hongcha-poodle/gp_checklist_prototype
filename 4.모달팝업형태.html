@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자율적 내부통제 자가진단표 - 개선 계획 프로토타입</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', 'Inter', sans-serif;
+        }
+        .modal {
+            transition: opacity 0.3s ease-in-out;
+        }
+        .modal-content {
+            transition: transform 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-7xl">
+        <!-- Header -->
+        <header class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900">자율적 내부통제 자가진단표</h1>
+            <p class="text-gray-600 mt-1">프로세스의 명확성과 효율성을 높이기 위한 디자인 프로토타입입니다.</p>
+        </header>
+
+        <!-- Document Info -->
+        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div>
+                    <h2 class="text-sm font-medium text-gray-500">관리번호</h2>
+                    <p class="text-lg font-semibold text-gray-900">2025-1-1</p>
+                </div>
+                <div>
+                    <h2 class="text-sm font-medium text-gray-500">대상자</h2>
+                    <p class="text-lg font-semibold text-gray-900">가온지점 홍길동 지점장</p>
+                </div>
+                <div>
+                    <h2 class="text-sm font-medium text-gray-500">상태</h2>
+                    <div class="flex items-center space-x-2">
+                         <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-orange-100 text-orange-700">
+                            <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                            </svg>
+                            피드백 도착 / 개선 필요
+                        </span>
+                    </div>
+                </div>
+                <div>
+                    <h2 class="text-sm font-medium text-gray-500">제출마감일</h2>
+                    <p class="text-lg font-semibold text-gray-900">2025-10-31</p>
+                </div>
+            </div>
+             <div class="mt-6 border-t pt-4">
+                <div class="flex items-center justify-between">
+                    <p class="text-sm text-gray-600">
+                        <span class="font-semibold">박배철 준법감시인</span>님의 피드백이 도착했습니다. 미흡 항목에 대한 개선 계획을 작성해주세요.
+                    </p>
+                     <button class="text-sm font-medium text-blue-600 hover:text-blue-800">승인 현황 전체보기 &rarr;</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Checklist Table -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-x-auto">
+            <table class="w-full text-sm text-left text-gray-600">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-100">
+                    <tr>
+                        <th scope="col" class="px-6 py-4 w-1/12">번호</th>
+                        <th scope="col" class="px-6 py-4 w-5/12">자가진단 항목</th>
+                        <th scope="col" class="px-6 py-4 w-2/12">점검결과</th>
+                        <th scope="col" class="px-6 py-4 w-2/12">개선 계획</th>
+                        <th scope="col" class="px-6 py-4 text-center w-2/12">조치</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Example 1: 적정 -->
+                    <tr class="bg-white border-b hover:bg-gray-50">
+                        <td class="px-6 py-4 font-medium text-gray-900">1-1</td>
+                        <td class="px-6 py-4">지점 내 보험설계사에 대한 근태관리는 적절하게 이루어지고 있는가?</td>
+                        <td class="px-6 py-4">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">적정</span>
+                        </td>
+                        <td class="px-6 py-4 text-gray-400 italic">해당 없음</td>
+                        <td class="px-6 py-4 text-center text-gray-400">-</td>
+                    </tr>
+                    <!-- Example 2: 미흡 (Action Needed) -->
+                    <tr class="bg-orange-50 border-b hover:bg-orange-100">
+                        <td class="px-6 py-4 font-medium text-gray-900">2-1</td>
+                        <td class="px-6 py-4">
+                            <p class="font-semibold text-gray-800">보험설계사 위촉 및 등록은 관련 법규에 따라 적법하게 이루어지고 있는가?</p>
+                            <p class="text-xs text-orange-600 mt-1">[미흡사항] 위촉 서류 일부 누락된 상태로 위촉 진행</p>
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">미흡</span>
+                        </td>
+                        <td class="px-6 py-4 text-gray-400 italic">계획 필요</td>
+                        <td class="px-6 py-4 text-center">
+                            <button id="openModalBtn" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
+                                개선 계획 작성
+                            </button>
+                        </td>
+                    </tr>
+                     <!-- More examples... -->
+                    <tr class="bg-white border-b hover:bg-gray-50">
+                        <td class="px-6 py-4 font-medium text-gray-900">2-2</td>
+                        <td class="px-6 py-4">모집질서 관련 교육(의무교육 포함)을 정기적으로 실시하고 있는가?</td>
+                        <td class="px-6 py-4">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">적정</span>
+                        </td>
+                         <td class="px-6 py-4 text-gray-400 italic">해당 없음</td>
+                        <td class="px-6 py-4 text-center text-gray-400">-</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal for Improvement Plan -->
+    <div id="improvementModal" class="modal fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 opacity-0 pointer-events-none">
+        <div class="modal-content bg-white rounded-xl shadow-2xl w-full max-w-2xl mx-auto z-10 transform scale-95">
+            <div class="p-8">
+                <div class="flex justify-between items-start mb-6">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900">개선 계획 작성</h2>
+                        <p class="text-gray-500 mt-1">승인자 피드백을 확인하고 개선 계획을 구체적으로 작성해주세요.</p>
+                    </div>
+                    <button class="close-modal-btn text-gray-400 hover:text-gray-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+                
+                <div class="space-y-6">
+                    <!-- Context Section -->
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">항목 정보</label>
+                        <p class="text-md text-gray-800">2-1. 보험설계사 위촉 및 등록은 관련 법규에 따라 적법하게 이루어지고 있는가?</p>
+                        
+                        <div class="mt-4 pt-4 border-t">
+                            <label class="block text-sm font-semibold text-orange-700 mb-2">승인자 피드백</label>
+                            <p class="text-md text-gray-800 bg-orange-50 p-3 rounded-md">위촉 서류 일부가 누락된 경우가 발견되었습니다. 재발 방지를 위한 구체적인 프로세스 개선 방안을 마련해주세요.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Input Section -->
+                    <div>
+                        <label for="improvementPlan" class="block text-sm font-semibold text-gray-700 mb-2">개선 사항 (필수)</label>
+                        <textarea id="improvementPlan" name="improvementPlan" rows="5" class="w-full px-3 py-2 text-gray-700 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="예: 위촉 프로세스 진행 시 '최종 서류 점검 체크리스트'를 도입하고..."></textarea>
+                    </div>
+
+                    <div>
+                        <label for="completionDate" class="block text-sm font-semibold text-gray-700 mb-2">완료 예정일 (필수)</label>
+                        <input type="date" id="completionDate" name="completionDate" class="w-full md:w-1/2 px-3 py-2 text-gray-700 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-gray-50 px-8 py-4 rounded-b-xl flex justify-end space-x-4">
+                <button class="close-modal-btn px-6 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400">취소</button>
+                <button id="saveBtn" class="px-8 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">저장</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const modal = document.getElementById('improvementModal');
+            const modalContent = modal.querySelector('.modal-content');
+            const openModalBtn = document.getElementById('openModalBtn');
+            const closeButtons = modal.querySelectorAll('.close-modal-btn');
+
+            const openModal = () => {
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                modalContent.classList.remove('scale-95');
+            };
+
+            const closeModal = () => {
+                modalContent.classList.add('scale-95');
+                modal.classList.add('opacity-0');
+                // Wait for transition to end before hiding it completely
+                setTimeout(() => {
+                    modal.classList.add('pointer-events-none');
+                }, 300);
+            };
+
+            openModalBtn.addEventListener('click', openModal);
+
+            closeButtons.forEach(button => {
+                button.addEventListener('click', closeModal);
+            });
+            
+            // Allow closing modal by clicking the background
+            modal.addEventListener('click', (event) => {
+                if (event.target === modal) {
+                    closeModal();
+                }
+            });
+
+            // Close modal with ESC key
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && !modal.classList.contains('pointer-events-none')) {
+                    closeModal();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

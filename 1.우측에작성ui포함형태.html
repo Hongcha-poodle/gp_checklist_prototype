@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>체크리스트 테이블 - 준수여부 버전</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* 전역 폰트 및 레이아웃 */
+    body { font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size:12px; background-color:#f7f7f7; }
+    .container-1200 { max-width:1200px; margin-left:auto; margin-right:auto; }
+  /* 테이블 스타일 - 이미지와 유사한 컴팩트한 스타일링 */
+  table { table-layout: fixed; max-width:1200px; }
+  table th, table td { font-size:12px; padding:8px 10px; vertical-align:middle; }
+  table th, table td { box-sizing: border-box; }
+  /* 특정 컬럼 텍스트 사이즈(대분류/소분류/질문) */
+  thead th:first-child, tbody td:first-child,
+  thead th:nth-child(2), tbody td:nth-child(2),
+  thead th:nth-child(3), tbody td:nth-child(3) { font-size:12px; }
+  /* .text-xs 등으로 작게 설정된 텍스트가 있어도 우선 적용 */
+  tbody td:first-child * , tbody td:nth-child(2) * , tbody td:nth-child(3) * { font-size:12px !important; }
+  /* due date input styling moved into improvement cell */
+    thead th { background:#f3f4f6; border-bottom:1px solid #e5e7eb; text-transform:none; color:#374151; font-weight:600; }
+    tbody tr { background:#fff; }
+    tbody tr + tr { border-top:1px solid #eef2f6; }
+  .cell-truncate { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  td[data-role="question"] .leading-snug { display:-webkit-box; -webkit-line-clamp:2; line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  /* 완료예정일 컬럼을 개선사항 내부로 통합했으므로 개별 컬럼 스타일 제거 */
+    /* 버튼/페이징 작게 보여주기 */
+    #submit-all { font-size:12px; padding:6px 12px; }
+    /* 필터/탭 영역 모사(선택적) */
+    .filter-row { background:#fff; padding:10px; border-bottom:1px solid #e5e7eb; margin-bottom:8px; }
+  </style>
+</head>
+<body class="min-h-screen bg-gray-50 p-6">
+  <div class="container-1200">
+    <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+      <!-- 탭/필터 영역 (이미지 스타일 모사) -->
+      <div class="filter-row flex items-center gap-3">
+        <div class="space-x-2">
+          <button class="px-3 py-1 bg-white border border-gray-200 rounded text-xs">신청</button>
+          <button class="px-3 py-1 bg-white border border-gray-200 rounded text-xs">신청이력</button>
+          <button class="px-3 py-1 bg-white border border-gray-200 rounded text-xs">중단/재배정요청</button>
+        </div>
+        <div class="ml-auto text-xs text-gray-600">검색필터 영역</div>
+      </div>
+      <div class="overflow-x-auto" style="-webkit-overflow-scrolling: touch;">
+  <table class="w-full">
+          <thead class="bg-gradient-to-r from-gray-50 to-gray-100 border-b-2 border-gray-200">
+            <tr>
+              <th class="px-3 py-2 text-left font-bold text-gray-700 cell-truncate" style="width: 70px;">대분류</th>
+              <th class="px-3 py-2 text-left font-bold text-gray-700 cell-truncate" style="width: 90px;">소분류</th>
+              <th class="px-3 py-2 text-left font-bold text-gray-700" style="width: 230px;">질문</th>
+              <th class="px-3 py-2 text-center font-bold text-gray-700 cell-truncate" style="width: 90px;">준수 여부</th>
+              <th class="px-3 py-2 text-left font-bold text-gray-700 cell-truncate" style="width: 220px;">미흡사항</th>
+              <th class="px-3 py-2 text-left font-bold text-gray-700 cell-truncate" style="width: 210px;">① 승인자 피드백</th>
+              <th class="px-3 py-2 text-left font-bold text-gray-700" style="width: 290px;">② 개선사항 작성 (완료예정일 포함)</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200">
+            <!-- Row 1 -->
+            <tr class="hover:bg-gray-50 transition-colors" data-row-id="r1">
+              <td class="px-3 py-2 text-sm text-gray-700 cell-truncate"><div class="truncate" title="1. 보험설계사관리 부문">1. 보험설계사관리 부문</div></td>
+              <td class="px-3 py-2 text-sm text-gray-700 cell-truncate"><div class="truncate" title="(1) 위·해촉기준 설명 등">(1) 위·해촉기준 설명 등</div></td>
+              <td class="px-3 py-2 text-sm text-gray-900" data-role="question"><div class="leading-snug">지점에 소속된 모든 보험설계사에게 위촉, 해촉 기준을 설명하고 교부된 위촉계약서의 이해 여부를 확인하고 있는가?</div></td>
+              <td class="px-3 py-2 text-sm text-gray-700 text-center cell-truncate"><span class="inline-flex items-center px-2 py-0.5 rounded bg-red-50 text-red-700 border border-red-200 text-[11px]">아니오</span></td>
+              <td class="px-3 py-2"><div class="text-gray-800" style="font-size:12px;">위해촉 기준을 재대로 안내하지 않음</div></td>
+              <td class="px-3 py-3">
+                <div class="pl-2 py-1 border-l-4 border-orange-400 bg-orange-50 toggle-on-no">
+                  <div class="text-xs text-gray-700 mb-1">김세현 차장 <span class="text-gray-500">(2025/05/13)</span></div>
+                  <p class="text-xs text-gray-800 leading-relaxed">신규 위촉 시 보험설계사와 면담을 필수로 진행하세요.</p>
+                </div>
+                <div class="text-xs text-gray-500 toggle-on-yes hidden">해당 없음</div>
+              </td>
+              <td class="px-3 py-3">
+                <div class="pl-2 py-1 min-h-[60px] border-l-4 border-gray-200 bg-gray-50 toggle-on-no">
+                  <textarea class="w-full border border-blue-200 rounded p-2 text-xs focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none" rows="3" placeholder="개선사항을 입력하세요" data-field="improvement"></textarea>
+                  <div class="mt-2 flex items-center gap-2">
+                    <label class="text-xs text-gray-600">완료예정일</label>
+                      <input type="text" inputmode="numeric" pattern="\d{4}-\d{2}-\d{2}" placeholder="YYYY-MM-DD" class="w-24 border border-blue-200 rounded px-2 py-1 text-xs focus:ring-2 focus:ring-blue-500 focus:border-transparent mt-1" data-field="dueDate" />
+                  </div>
+                </div>
+                <div class="text-xs text-gray-500 toggle-on-yes hidden">해당 없음</div>
+              </td>
+            </tr>
+
+            <!-- Row 2 -->
+            <tr class="hover:bg-gray-50 transition-colors" data-row-id="r2">
+              <td class="px-3 py-2 text-sm text-gray-700 cell-truncate"><div class="truncate" title="1. 보험설계사관리 부문">1. 보험설계사관리 부문</div></td>
+              <td class="px-3 py-2 text-sm text-gray-700 cell-truncate"><div class="truncate" title="(2) 모집경력조회 등">(2) 모집경력조회 등</div></td>
+              <td class="px-3 py-2 text-sm text-gray-900" data-role="question"><div class="leading-snug">신규 모집인 위촉 전 금융소비자보호 교육을 실시하고 이수 여부를 검증하고 있는가?</div></td>
+              <td class="px-3 py-2 text-sm text-gray-700 text-center cell-truncate"><span class="inline-flex items-center px-2 py-0.5 rounded bg-green-50 text-green-700 border border-green-200 text-[11px]">예</span></td>
+              <td class="px-3 py-2"><div class="text-gray-800" style="font-size:12px;">위해촉 기준을 재대로 안내하지 않음</div></td>
+              <td class="px-3 py-3">
+                <div class="pl-2 py-1 border-l-4 border-orange-400 bg-orange-50 toggle-on-no">
+                  <div class="text-xs text-gray-700 mb-1">박준서 부장 <span class="text-gray-500">(2025/05/13)</span></div>
+                  <p class="text-xs text-gray-800 leading-relaxed">보장분석 프로세스의 정확성을 개선해주세요.</p>
+                </div>
+                <div class="text-xs text-gray-500 toggle-on-yes hidden">해당 없음</div>
+              </td>
+              <td class="px-3 py-3">
+                <div class="pl-2 py-1 min-h-[60px] border-l-4 border-blue-400 bg-blue-50 toggle-on-no">
+                  <textarea class="w-full border border-blue-200 rounded p-2 text-xs focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none" rows="3" placeholder="개선사항을 입력하세요" data-field="improvement">고객 보장분석 시 3단계 검증 프로세스를 도입하겠습니다.</textarea>
+                  <div class="mt-2 flex items-center gap-2">
+                    <label class="text-xs text-gray-600">완료예정일</label>
+                      <input type="text" inputmode="numeric" pattern="\d{4}-\d{2}-\d{2}" placeholder="YYYY-MM-DD" class="w-24 border border-blue-200 rounded px-2 py-1 text-xs focus:ring-2 focus:ring-blue-500 focus:border-transparent mt-1" data-field="dueDate" value="2025-05-20" />
+                  </div>
+                </div>
+                <div class="text-xs text-gray-500 toggle-on-yes hidden">해당 없음</div>
+              </td>
+            </tr>
+
+            <!-- Row 3 -->
+            <tr class="hover:bg-gray-50 transition-colors" data-row-id="r3">
+              <td class="px-3 py-2 text-sm text-gray-700 cell-truncate"><div class="truncate" title="1. 보험설계사관리 부문">1. 보험설계사관리 부문</div></td>
+              <td class="px-3 py-2 text-sm text-gray-700 cell-truncate"><div class="truncate" title="(3) 보험설계사관리 감독">(3) 보험설계사관리 감독</div></td>
+              <td class="px-3 py-2 text-sm text-gray-900" data-role="question"><div class="leading-snug">불완전판매 방지를 위해 상품 설명서 교부 및 핵심설명확인서를 필수로 징구하고 있는가?</div></td>
+              <td class="px-3 py-2 text-sm text-gray-700 text-center cell-truncate"><span class="inline-flex items-center px-2 py-0.5 rounded bg-green-50 text-green-700 border border-green-200 text-[11px]">예</span></td>
+              <td class="px-3 py-2"><div class="text-gray-800" style="font-size:12px;">위해촉 기준을 재대로 안내하지 않음</div></td>
+              <td class="px-3 py-3">
+                <div class="pl-2 py-1 border-l-4 border-orange-400 bg-orange-50 toggle-on-no">
+                  <div class="text-xs text-gray-700 mb-1">정해인 이사 <span class="text-gray-500">(2025/05/12)</span></div>
+                  <p class="text-xs text-gray-800 leading-relaxed">AS 응대 프로세스 개선이 필요합니다.</p>
+                </div>
+                <div class="text-xs text-gray-500 toggle-on-yes hidden">해당 없음</div>
+              </td>
+              <td class="px-3 py-3">
+                <div class="pl-2 py-1 min-h-[60px] border-l-4 border-blue-400 bg-blue-50 toggle-on-no">
+                  <textarea class="w-full border border-blue-200 rounded p-2 text-xs focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none" rows="3" placeholder="개선사항을 입력하세요" data-field="improvement">AS 요청 접수 후 24시간 내 1차 응대 완료 프로세스를 구축하였습니다.</textarea>
+                  <div class="mt-2 flex items-center gap-2">
+                    <label class="text-xs text-gray-600">완료예정일</label>
+                      <input type="text" inputmode="numeric" pattern="\d{4}-\d{2}-\d{2}" placeholder="YYYY-MM-DD" class="w-24 border border-blue-200 rounded px-2 py-1 text-xs focus:ring-2 focus:ring-blue-500 focus:border-transparent mt-1" data-field="dueDate" value="2025-05-18" />
+                  </div>
+                </div>
+                <div class="text-xs text-gray-500 toggle-on-yes hidden">해당 없음</div>
+              </td>
+            </tr>
+
+            <!-- Row 4 -->
+            <tr class="hover:bg-gray-50 transition-colors" data-row-id="r4">
+              <td class="px-3 py-2 text-sm text-gray-700 cell-truncate"><div class="truncate" title="1. 보험설계사관리 부문">1. 보험설계사관리 부문</div></td>
+              <td class="px-3 py-2 text-sm text-gray-700 cell-truncate"><div class="truncate" title="(4) 비가동설계사관리">(4) 비가동설계사관리</div></td>
+              <td class="px-3 py-2 text-sm text-gray-900" data-role="question"><div class="leading-snug">모집인 변경·해촉 시 고객 안내 및 관련 전산 반영이 지연 없이 수행되고 있는가?</div></td>
+              <td class="px-3 py-2 text-sm text-gray-700 text-center cell-truncate"><span class="inline-flex items-center px-2 py-0.5 rounded bg-red-50 text-red-700 border border-red-200 text-[11px]">아니오</span></td>
+              <td class="px-3 py-2"><div class="text-gray-800" style="font-size:12px;">위해촉 기준을 재대로 안내하지 않음</div></td>
+              <td class="px-3 py-3">
+                <div class="pl-2 py-1 border-l-4 border-orange-400 bg-orange-50 toggle-on-no">
+                  <div class="text-xs text-gray-700 mb-1">최동욱 차장 <span class="text-gray-500">(2025/05/14)</span></div>
+                  <p class="text-xs text-gray-800 leading-relaxed">계약 체결리스트를 준수하고 활동 중인 보험설계사를 파악하세요.</p>
+                </div>
+                <div class="text-xs text-gray-500 toggle-on-yes hidden">해당 없음</div>
+              </td>
+              <td class="px-3 py-3">
+                <div class="pl-2 py-1 min-h-[60px] border-l-4 border-gray-200 bg-gray-50 toggle-on-no">
+                  <textarea class="w-full border border-blue-200 rounded p-2 text-xs focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none" rows="3" placeholder="개선사항을 입력하세요" data-field="improvement"></textarea>
+                  <div class="mt-2 flex items-center gap-2">
+                    <label class="text-xs text-gray-600">완료예정일</label>
+                      <input type="text" inputmode="numeric" pattern="\d{4}-\d{2}-\d{2}" placeholder="YYYY-MM-DD" class="w-24 border border-blue-200 rounded px-2 py-1 text-xs focus:ring-2 focus:ring-blue-500 focus:border-transparent mt-1" data-field="dueDate" />
+                  </div>
+                </div>
+                <div class="text-xs text-gray-500 toggle-on-yes hidden">해당 없음</div>
+              </td>
+            </tr>
+
+            <!-- Row 5 -->
+            <tr class="hover:bg-gray-50 transition-colors" data-row-id="r5">
+              <td class="px-3 py-2 text-sm text-gray-700 cell-truncate"><div class="truncate" title="2. 불완전판매 사전예방 및 민원관리 부문">2. 불완전판매 사전예방 및 민원관리 부문</div></td>
+              <td class="px-3 py-2 text-sm text-gray-700 cell-truncate"><div class="truncate" title="(1) 보험상품 설명">(1) 보험상품 설명</div></td>
+              <td class="px-3 py-2 text-sm text-gray-900" data-role="question"><div class="leading-snug">민원 발생 시 원인분석 및 재발방지 대책을 수립하여 전사 공유하고 있는가?</div></td>
+              <td class="px-3 py-2 text-sm text-gray-700 text-center cell-truncate"><span class="inline-flex items-center px-2 py-0.5 rounded bg-green-50 text-green-700 border border-green-200 text-[11px]">예</span></td>
+              <td class="px-3 py-2"><div class="text-gray-800" style="font-size:12px;">위해촉 기준을 재대로 안내하지 않음</div></td>
+              <td class="px-3 py-3">
+                <div class="pl-2 py-1 border-l-4 border-orange-400 bg-orange-50 toggle-on-no">
+                  <div class="text-xs text-gray-700 mb-1">한지우 부장 <span class="text-gray-500">(2025/05/13)</span></div>
+                  <p class="text-xs text-gray-800 leading-relaxed">신규 허용시 보험설계사의 면담 기록이 미흡합니다.</p>
+                </div>
+                <div class="text-xs text-gray-500 toggle-on-yes hidden">해당 없음</div>
+              </td>
+              <td class="px-3 py-3">
+                <div class="pl-2 py-1 min-h-[60px] border-l-4 border-blue-400 bg-blue-50 toggle-on-no">
+                  <textarea class="w-full border border-blue-200 rounded p-2 text-xs focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none" rows="3" placeholder="개선사항을 입력하세요" data-field="improvement">면담 체크리스트를 작성하고 시스템에 등록하는 프로세스를 추가하겠습니다.</textarea>
+                  <div class="mt-2 flex items-center gap-2">
+                    <label class="text-xs text-gray-600">완료예정일</label>
+                      <input type="text" inputmode="numeric" pattern="\d{4}-\d{2}-\d{2}" placeholder="YYYY-MM-DD" class="w-24 border border-blue-200 rounded px-2 py-1 text-xs focus:ring-2 focus:ring-blue-500 focus:border-transparent mt-1" data-field="dueDate" value="2025-05-19" />
+                  </div>
+                </div>
+                <div class="text-xs text-gray-500 toggle-on-yes hidden">해당 없음</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- 하단 통합 제출 버튼 -->
+    </div>
+    <div class="flex justify-end mt-3">
+      <button id="submit-all" type="button" class="px-4 py-2 bg-blue-600 text-white rounded text-sm font-medium hover:bg-blue-700">제출(완료)</button>
+    </div>
+  </div>
+
+  <script>
+    // 준수 여부 표기에 맞춰 토글, 하단 통합 제출 처리
+    document.addEventListener('DOMContentLoaded', function () {
+      const rows = document.querySelectorAll('tr[data-row-id]');
+
+        const applyToggleFromDisplay = (row) => {
+        const yesTag = row.querySelector('td:nth-child(4) span');
+        const isYes = yesTag && yesTag.classList.contains('text-green-700');
+        const improvement = row.querySelector('[data-field="improvement"]');
+        const dueDate = row.querySelector('[data-field="dueDate"]');
+
+        row.querySelectorAll('.toggle-on-yes').forEach(el => el.classList.toggle('hidden', !isYes));
+        row.querySelectorAll('.toggle-on-no').forEach(el => el.classList.toggle('hidden', isYes));
+
+  const dueInput = row.querySelector('input[data-field="dueDate"]');
+        // 개선사항이 비활성(예)일 때는 개선사항 textarea를 비활성화하고, dueInput은 숨기도록 처리
+        if (isYes) {
+          improvement?.setAttribute('disabled', 'true');
+          if (dueInput) dueInput.style.display = 'none';
+        } else {
+          improvement?.removeAttribute('disabled');
+          if (dueInput) dueInput.style.display = '';
+        }
+      };
+
+      rows.forEach(applyToggleFromDisplay);
+
+      // 개선사항 포커스 시 좌측 보더 컬러 활성화
+      document.querySelectorAll('textarea[data-field="improvement"]').forEach((ta) => {
+        ta.addEventListener('focus', () => {
+          const wrap = ta.closest('[class*="border-l-"]');
+          if (wrap) {
+            wrap.classList.remove('border-gray-200','border-blue-400');
+            wrap.classList.add('border-blue-600');
+          }
+        });
+        ta.addEventListener('blur', () => {
+          const wrap = ta.closest('[class*="border-l-"]');
+          if (wrap) {
+            if (wrap.classList.contains('bg-blue-50')) {
+              wrap.classList.remove('border-blue-600');
+              wrap.classList.add('border-blue-400');
+            } else {
+              wrap.classList.remove('border-blue-600');
+              wrap.classList.add('border-gray-200');
+            }
+          }
+        });
+      });
+
+      // 통합 제출 버튼
+      const submitAll = document.getElementById('submit-all');
+      submitAll.addEventListener('click', () => {
+        for (const row of rows) {
+          const yesTag = row.querySelector('td:nth-child(4) span');
+          const isYes = yesTag && yesTag.classList.contains('text-green-700');
+          const improvement = row.querySelector('[data-field="improvement"]');
+          const dueDate = row.querySelector('input[data-field="dueDate"]');
+
+          if (!isYes) {
+            const improvementVal = improvement?.value?.trim();
+            const dueVal = dueDate?.value;
+              if (!improvementVal) {
+                alert('개선사항을 입력하세요.');
+                improvement?.focus();
+                return;
+              }
+              if (!dueVal) {
+                alert('완료예정일을 입력하세요 (YYYY-MM-DD).');
+                dueDate?.focus();
+                return;
+              }
+              // 간단한 패턴 검사 YYYY-MM-DD
+              const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+              if (!datePattern.test(dueVal)) {
+                alert('완료예정일을 YYYY-MM-DD 형식으로 입력하세요.');
+                dueDate?.focus();
+                return;
+              }
+          }
+        }
+
+        submitAll.textContent = '제출됨';
+        submitAll.className = 'px-4 py-2 bg-green-600 text-white rounded text-sm font-medium';
+        document.querySelectorAll('textarea[data-field="improvement"], input[data-field="dueDate"]').forEach(el => {
+          el.setAttribute('disabled', 'true');
+        });
+      });
+    });
+  </script>
+</body>
+</html>
+
+

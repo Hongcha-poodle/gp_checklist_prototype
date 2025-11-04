@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자율적 내부통제 자가진단표 - 확장형 프로토타입 (스타일 개선)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', 'Inter', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .expandable-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+        .expandable-content.expanded {
+            max-height: 500px; /* 충분한 높이 */
+            padding-top: 1.5rem; /* 24px */
+            padding-bottom: 1.5rem; /* 24px */
+        }
+        .rotate-180 {
+            transform: rotate(180deg);
+        }
+        .transition-transform {
+            transition: transform 0.3s ease;
+        }
+        /* 참고 UI 스타일 적용 */
+        .btn-primary {
+            background-color: #1a73e8;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #1765cc;
+        }
+        .btn-secondary {
+            background-color: #e9ecef;
+            color: #495057;
+            border: 1px solid #ced4da;
+        }
+        .btn-secondary:hover {
+            background-color: #dee2e6;
+        }
+        .table-header {
+            background-color: #f2f2f2;
+            color: #495057;
+        }
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-weight: 500;
+        }
+        .status-feedback {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-7xl">
+        <!-- Header -->
+        <header class="mb-6">
+            <h1 class="text-2xl font-bold text-gray-900">자율적 내부통제 자가진단표</h1>
+        </header>
+
+        <!-- Document Info -->
+        <div class="bg-white p-6 rounded-md shadow-sm border border-gray-200 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div>
+                    <h2 class="text-sm font-medium text-gray-500">관리번호</h2>
+                    <p class="text-base font-semibold text-gray-900">2025-1-1</p>
+                </div>
+                <div>
+                    <h2 class="text-sm font-medium text-gray-500">대상자</h2>
+                    <p class="text-base font-semibold text-gray-900">가온지점 홍길동 지점장</p>
+                </div>
+                <div>
+                    <h2 class="text-sm font-medium text-gray-500">상태</h2>
+                    <p class="status-badge status-feedback text-sm">피드백 도착 / 개선 필요</p>
+                </div>
+                <div>
+                    <h2 class="text-sm font-medium text-gray-500">제출마감일</h2>
+                    <p class="text-base font-semibold text-gray-900">2025-10-31</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Checklist Table -->
+        <div class="bg-white rounded-md shadow-sm border border-gray-200 overflow-x-auto">
+            <table class="w-full text-sm text-left text-gray-700">
+                <thead class="text-xs table-header uppercase">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 w-1/12 font-medium">번호</th>
+                        <th scope="col" class="px-6 py-3 w-5/12 font-medium">자가진단 항목</th>
+                        <th scope="col" class="px-6 py-3 w-2/12 font-medium">점검결과</th>
+                        <th scope="col" class="px-6 py-3 w-2/12 font-medium">개선 계획</th>
+                        <th scope="col" class="px-6 py-3 text-center w-2/12 font-medium">조치</th>
+                    </tr>
+                </thead>
+                <tbody id="checklist-body">
+                    <!-- Example 1: 적정 -->
+                    <tr class="bg-white border-b hover:bg-gray-50">
+                        <td class="px-6 py-4 font-medium text-gray-900">1-1</td>
+                        <td class="px-6 py-4">지점 내 보험설계사에 대한 근태관리는 적절하게 이루어지고 있는가?</td>
+                        <td class="px-6 py-4"><span class="status-badge bg-green-100 text-green-800 text-xs">적정</span></td>
+                        <td class="px-6 py-4 text-gray-500">해당 없음</td>
+                        <td class="px-6 py-4 text-center text-gray-500">-</td>
+                    </tr>
+                    <!-- Example 2: 미흡 (Action Needed) -->
+                    <tr class="bg-white border-b hover:bg-gray-50">
+                        <td class="px-6 py-4 font-medium text-gray-900">2-1</td>
+                        <td class="px-6 py-4">
+                            <p class="font-semibold text-gray-800">보험설계사 위촉 및 등록은 관련 법규에 따라 적법하게 이루어지고 있는가?</p>
+                            <p class="text-xs text-red-600 mt-1">[미흡사항] 위촉 서류 일부 누락된 상태로 위촉 진행</p>
+                        </td>
+                        <td class="px-6 py-4"><span class="status-badge bg-red-100 text-red-800 text-xs">미흡</span></td>
+                        <td class="px-6 py-4 text-orange-600 font-medium">계획 필요</td>
+                        <td class="px-6 py-4 text-center">
+                            <button class="toggle-expand-btn w-full flex items-center justify-center btn-primary text-sm font-medium py-2 px-4 rounded-md transition-colors duration-200">
+                                <span>개선 계획 작성</span>
+                                <svg class="w-5 h-5 ml-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
+                        </td>
+                    </tr>
+                    <!-- Expandable Row Content -->
+                    <tr class="expandable-row hidden">
+                        <td colspan="5" class="bg-blue-50/50">
+                            <div class="expandable-content p-6">
+                                <div class="w-full max-w-3xl mx-auto bg-white p-6 border rounded-md">
+                                    <h3 class="text-base font-bold text-gray-900 mb-4">개선 계획 작성 (항목 2-1)</h3>
+                                    <div class="space-y-6">
+                                        <div class="bg-gray-50 p-4 rounded-md border">
+                                            <label class="block text-xs font-bold text-gray-600 mb-2">승인자 피드백</label>
+                                            <p class="text-sm text-gray-800">위촉 서류 일부가 누락된 경우가 발견되었습니다. 재발 방지를 위한 구체적인 프로세스 개선 방안을 마련해주세요.</p>
+                                        </div>
+                                        <div>
+                                            <label for="improvementPlan" class="block text-sm font-medium text-gray-700 mb-2">개선 사항 (필수)</label>
+                                            <textarea rows="4" class="w-full px-3 py-2 text-sm text-gray-700 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="예: 위촉 프로세스 진행 시 '최종 서류 점검 체크리스트'를 도입하고..."></textarea>
+                                        </div>
+                                        <div>
+                                            <label for="completionDate" class="block text-sm font-medium text-gray-700 mb-2">완료 예정일 (필수)</label>
+                                            <input type="date" class="w-full md:w-1/2 px-3 py-2 text-sm text-gray-700 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                        </div>
+                                        <div class="flex justify-end space-x-3 pt-4">
+                                            <button class="close-expand-btn btn-secondary px-6 py-2 text-sm font-medium rounded-md">취소</button>
+                                            <button class="btn-primary px-8 py-2 text-sm font-medium rounded-md">저장</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const checklistBody = document.getElementById('checklist-body');
+
+            checklistBody.addEventListener('click', function(event) {
+                const toggleBtn = event.target.closest('.toggle-expand-btn');
+                if (toggleBtn) {
+                    const actionRow = toggleBtn.closest('tr');
+                    const expandableRow = actionRow.nextElementSibling;
+                    const content = expandableRow.querySelector('.expandable-content');
+                    const buttonText = toggleBtn.querySelector('span');
+                    const buttonIcon = toggleBtn.querySelector('svg');
+
+                    if (expandableRow && expandableRow.classList.contains('expandable-row')) {
+                        const isCurrentlyExpanded = content.classList.contains('expanded');
+
+                        // Close any other open rows
+                        const allExpandableRows = checklistBody.querySelectorAll('.expandable-row');
+                        allExpandableRows.forEach(row => {
+                            const otherContent = row.querySelector('.expandable-content');
+                            if (otherContent.classList.contains('expanded') && otherContent !== content) {
+                                otherContent.classList.remove('expanded');
+                                setTimeout(() => { row.classList.add('hidden'); }, 500);
+                                
+                                const otherActionRow = row.previousElementSibling;
+                                const otherBtn = otherActionRow.querySelector('.toggle-expand-btn');
+                                if (otherBtn) {
+                                    otherBtn.querySelector('span').textContent = '개선 계획 작성';
+                                    otherBtn.querySelector('svg').classList.remove('rotate-180');
+                                }
+                            }
+                        });
+
+                        // Toggle the clicked row
+                        if (isCurrentlyExpanded) {
+                            content.classList.remove('expanded');
+                            buttonText.textContent = '개선 계획 작성';
+                            buttonIcon.classList.remove('rotate-180');
+                            setTimeout(() => { expandableRow.classList.add('hidden'); }, 500);
+                        } else {
+                            expandableRow.classList.remove('hidden');
+                            setTimeout(() => {
+                                content.classList.add('expanded');
+                                buttonText.textContent = '계획 작성 닫기';
+                                buttonIcon.classList.add('rotate-180');
+                            }, 10);
+                        }
+                    }
+                }
+
+                const closeBtn = event.target.closest('.close-expand-btn');
+                if (closeBtn) {
+                    const expandableRow = closeBtn.closest('.expandable-row');
+                    const actionRow = expandableRow.previousElementSibling;
+                    const toggleBtn = actionRow.querySelector('.toggle-expand-btn');
+                    
+                    if(toggleBtn) toggleBtn.click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
